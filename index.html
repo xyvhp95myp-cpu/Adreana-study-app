@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+body{background:#080d1a;color:#e2e8f0;font-family:Georgia,serif;padding:20px}
+button{cursor:pointer;font-family:Georgia,serif}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px;margin-bottom:12px}
+.opt{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#e2e8f0;margin-bottom:8px;font-size:14px}
+.green{background:rgba(34,197,94,0.2)!important;border-color:#22c55e!important;color:#4ade80!important}
+.red{background:rgba(239,68,68,0.2)!important;border-color:#ef4444!important;color:#f87171!important}
+.next{background:#4f9cf9;border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px;margin-top:10px}
+.homebtn{background:#4f9cf9;border:none;color:#fff;padding:10px 20px;border-radius:8px;font-size:15px;margin:8px 4px}
+h1{font-size:24px;margin-bottom:8px}
+.sub{color:#64748b;font-size:13px;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+var questions = [
+{id:"e1",q:"Which ethical principle refers to acting in the client's best interest?",o:["A) Autonomy","B) Nonmaleficence","C) Beneficence","D) Fidelity"],c:"C",e:"Beneficence means actively promoting client well-being. Autonomy respects self-determination. Nonmaleficence means do no harm. Fidelity means keeping promises."},
+{id:"e2",q:"A client poses an imminent threat to an identifiable third party. The counselor should FIRST:",o:["A) Maintain confidentiality","B) Warn the third party and notify authorities","C) Consult a supervisor","D) Hospitalize the client immediately"],c:"B",e:"The Tarasoff duty to warn requires counselors to protect identifiable third parties from serious and imminent threats. Confidentiality yields to public safety."},
+{id:"e3",q:"Informed consent in counseling is BEST described as:",o:["A) A one-time agreement at the start of treatment","B) An ongoing process covering risks, benefits, and alternatives","C) A legal document signed before the first session","D) Permission granted by a third-party payer"],c:"B",e:"Informed consent is an ongoing process -- not a one-time event -- covering goals, techniques, risks, benefits, alternatives, and the right to withdraw."}
+];
+
+var appView = “home”;
+var curQ = null;
+var curIdx = 0;
+var picked = null;
+var numCorrect = 0;
+var numTotal = 0;
+
+function startQuiz(){
+curIdx = Math.floor(Math.random() * questions.length);
+curQ = questions[curIdx];
+picked = null;
+appView = “quiz”;
+showPage();
+}
+
+function doAnswer(letter){
+if(picked) return;
+picked = letter;
+numTotal++;
+if(letter === curQ.c) numCorrect++;
+showPage();
+}
+
+function doNext(){
+curIdx = (curIdx + 1) % questions.length;
+curQ = questions[curIdx];
+picked = null;
+showPage();
+}
+
+function goHome(){
+appView = “home”;
+showPage();
+}
+
+function showPage(){
+var app = document.getElementById(“app”);
+app.innerHTML = “”;
+
+if(appView === “home”){
+var h = document.createElement(“h1”);
+h.textContent = “NCE Study Hub”;
+app.appendChild(h);
+
+```
+var sub = document.createElement("p");
+sub.className = "sub";
+sub.textContent = "Mini test -- 3 questions";
+app.appendChild(sub);
+
+var b = document.createElement("button");
+b.className = "homebtn";
+b.textContent = "Start Studying";
+b.onclick = startQuiz;
+app.appendChild(b);
+
+if(numTotal > 0){
+  var s = document.createElement("p");
+  s.style.marginTop = "16px";
+  s.style.color = "#22c55e";
+  s.textContent = "Score: " + numCorrect + " / " + numTotal;
+  app.appendChild(s);
+}
+return;
+```
+
+}
+
+var card = document.createElement(“div”);
+card.className = “card”;
+
+var lbl = document.createElement(“div”);
+lbl.style.fontSize = “10px”;
+lbl.style.color = “#475569”;
+lbl.style.marginBottom = “10px”;
+lbl.textContent = “Question”;
+card.appendChild(lbl);
+
+var qt = document.createElement(“p”);
+qt.style.fontSize = “15px”;
+qt.style.lineHeight = “1.7”;
+qt.style.color = “#e2e8f0”;
+qt.style.marginBottom = “16px”;
+qt.textContent = curQ.q;
+card.appendChild(qt);
+
+for(var i = 0; i < curQ.o.length; i++){
+(function(opt){
+var letter = opt.charAt(0);
+var btn = document.createElement(“button”);
+btn.className = “opt”;
+btn.textContent = opt;
+if(picked){
+if(letter === curQ.c) btn.className += “ green”;
+else if(letter === picked) btn.className += “ red”;
+btn.disabled = true;
+}
+(function(l){ btn.onclick = function(){ doAnswer(l); }; })(letter);
+card.appendChild(btn);
+})(curQ.o[i]);
+}
+
+if(picked){
+var exp = document.createElement(“div”);
+exp.style.marginTop = “12px”;
+exp.style.padding = “12px”;
+exp.style.background = “rgba(255,255,255,0.04)”;
+exp.style.borderRadius = “10px”;
+
+```
+var hdr = document.createElement("div");
+hdr.style.fontWeight = "700";
+hdr.style.marginBottom = "6px";
+hdr.textContent = picked === curQ.c ? "Correct!" : "Incorrect -- answer: " + curQ.c;
+exp.appendChild(hdr);
+
+var et = document.createElement("p");
+et.style.fontSize = "13px";
+et.style.color = "#94a3b8";
+et.style.lineHeight = "1.6";
+et.style.marginBottom = "10px";
+et.textContent = curQ.e;
+exp.appendChild(et);
+
+var nb = document.createElement("button");
+nb.className = "next";
+nb.textContent = "Next Question";
+nb.onclick = doNext;
+exp.appendChild(nb);
+
+card.appendChild(exp);
+```
+
+}
+
+app.appendChild(card);
+
+var hb = document.createElement(“button”);
+hb.style.background = “none”;
+hb.style.border = “1px solid rgba(255,255,255,0.15)”;
+hb.style.color = “#94a3b8”;
+hb.style.padding = “6px 14px”;
+hb.style.borderRadius = “8px”;
+hb.style.fontSize = “12px”;
+hb.style.marginTop = “8px”;
+hb.textContent = “Back to Home”;
+hb.onclick = goHome;
+app.appendChild(hb);
+}
+
+showPage();
+</script>
+
+</body>
+</html>
