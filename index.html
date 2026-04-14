@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NCE</title>
+</head>
+<body style="background:#080d1a;color:#e2e8f0;padding:40px;font-family:Georgia,serif">
+<div id="app">Loading...</div>
+<script src="data.js"></script>
+<script>
+var app = document.getElementById("app");
+if(typeof QB !== "undefined"){
+  app.textContent = "Working! " + Object.keys(QB).length + " domains loaded";
+} else {
+  app.textContent = "QB failed to load";
+}
+</script>
+</body>
+</html>
